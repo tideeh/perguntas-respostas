@@ -1,0 +1,86 @@
+<%- include("partials/header.ejs") %>
+<body>
+	<%- include("partials/navbar.ejs") %>
+	
+	<div class="container">
+		<div class="card" id="card-pergunta">
+			<div class="card-header">
+				<h3><%= pergunta.titulo %></h3>
+			</div>
+			<div class="card-body">
+				<%= pergunta.descricao %>
+				<br><br>
+				<form method="POST" action="/responder" id="responderForm" name="responderForm">
+					<input type="hidden" name="perguntaId" value="<%= pergunta.id %>">
+					<textarea placeholder="Digite a resposta" id="resposta" name="resposta" class="form-control"></textarea>
+					<br>
+					<button class="btn btn-success">Responder</button>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<% if (respostas.length > 0) { %>
+		<div class="container">
+			<hr>
+			<div class="card">
+				<div class="card-header">
+					<h3>Respostas</h3>
+				</div>
+			</div>
+			<% respostas.forEach(resposta => { %>
+				<div class="card" id="card-respostas">
+					<div class="card-body">
+						<%= resposta.corpo %>
+					</div>
+				</div>
+			<% }) %>
+		</div>
+	<% } %>
+
+</body>
+<%- include("partials/footer.ejs") %>
+
+<script type="text/javascript">
+
+	$(document).ready(function() {
+
+		$("#responderForm").submit(function(e) {
+			e.preventDefault();
+
+			if(validateForm() == false)
+				return false;
+
+			var form = $(this);
+			var actionUrl = form.attr('action');
+
+			$.ajax({
+				type: "POST",
+				url: actionUrl,
+				data: form.serialize(),
+				success: function(res) {
+					if( res.success ) {
+						alert("Resposta enviada com sucesso!");
+						window.location.replace("/pergunta/<%= pergunta.id %>");
+					} else {
+						alert("Erro: "+res.msg);
+					}
+				}
+			});
+		});
+
+		function validateForm() {
+			var form = document.forms["responderForm"];
+			var resposta = form["resposta"].value;
+
+			if (resposta == "") {
+				alert("Digite uma resposta!");
+				return false;
+			}
+
+			return true;
+		}
+		
+	});
+
+</script>

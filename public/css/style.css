@@ -1,0 +1,12 @@
+body {
+	background-color: rgb(240, 240, 240);
+}
+#img-logo-menu {
+	height: 50px;
+}
+#card-perguntas, #card-pergunta {
+	margin-top: 5vh;
+}
+#card-respostas {
+	margin-top: 1vh;
+}

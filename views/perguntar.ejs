@@ -1,0 +1,74 @@
+<%- include("partials/header.ejs") %>
+<body>
+	<%- include("partials/navbar.ejs") %>
+
+	<div class="container">
+		<div class="card" id="card-perguntas">
+			<div class="card-header">
+				<h3>Realizar Pergunta</h3>
+			</div>
+			<div class="card-body">
+				<form method="POST" action="/salvar-pergunta" id="perguntarForm" name="perguntarForm">
+					<label for="titulo">Título</label>
+					<input type="text" placeholder="Título" id="titulo" name="titulo" class="form-control">
+					<br>
+					<label for="descricao">Descrição</label>
+					<textarea placeholder="Descreva a pergunta" id="descricao" name="descricao" class="form-control"></textarea>
+					<br>
+					<button class="btn btn-success">Perguntar</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+</body>
+<%- include("partials/footer.ejs") %>
+
+<script type="text/javascript">
+
+	$(document).ready(function() {
+
+		$("#perguntarForm").submit(function(e) {
+			e.preventDefault();
+
+			if(validateForm() == false)
+				return false;
+
+			var form = $(this);
+			var actionUrl = form.attr('action');
+
+			$.ajax({
+				type: "POST",
+				url: actionUrl,
+				data: form.serialize(),
+				success: function(res) {
+					if( res.success ) {
+						alert("Pergunta realizada com sucesso!");
+						window.location.replace("/");
+					} else {
+						alert("Erro: "+res.msg);
+					}
+				}
+			});
+		});
+
+		function validateForm() {
+			var form = document.forms["perguntarForm"];
+			var titulo = form["titulo"].value;
+			var descricao = form["descricao"].value;
+
+			if (titulo == "") {
+				alert("O Título é obrigatório!");
+				return false;
+			}
+			if (descricao == "") {
+				alert("A Descrição é obrigatória!");
+				return false;
+			}
+
+			return true;
+		}
+
+	});
+
+</script>
