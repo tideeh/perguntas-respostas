@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
+require("dotenv").config();
 const connection = require("./database/database");
 const Pergunta = require("./database/models/Pergunta");
 const Resposta = require("./database/models/Resposta");
@@ -99,6 +100,6 @@ app.post("/responder", (req, res) => {
 	});
 });
 
-app.listen(8181, () => {
-	console.log("App rodando na porta 8181");
+app.listen(process.env.APP_PORT, () => {
+	console.log("App rodando na porta "+process.env.APP_PORT);
 });
